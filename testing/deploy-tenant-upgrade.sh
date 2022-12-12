@@ -17,6 +17,10 @@
 
 SCRIPT_DIR=$(dirname "$0")
 
+export SCRIPT_DIR
+
+source "${SCRIPT_DIR}/common.sh"
+
 lower_version="$1"
 upper_version="$2"
 namespace=tenant-lite
@@ -26,10 +30,6 @@ dummy=dummy.data
 localport=9000
 totalwait=0
 alias=minios3
-
-export SCRIPT_DIR
-
-source "${SCRIPT_DIR}/common.sh"
 
 # Preparing tenant for bucket manipulation
 function bootstrap_tenant() {
