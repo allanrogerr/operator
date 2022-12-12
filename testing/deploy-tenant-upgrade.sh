@@ -77,7 +77,7 @@ function bootstrap_tenant() {
 function upload_dummy_data() {
   echo "Uploading dummy data to tenant bucket"
   cp ${SCRIPT_DIR}/deploy-tenant-upgrade.sh ${SCRIPT_DIR}/$dummy
-  mc cp ${SCRIPT_DIR}/$dummy minio/data/$dummy --insecure
+  mc cp ${SCRIPT_DIR}/$dummy $alias/$bucket/$dummy --insecure
 }
 
 # Download dummy data from tenant bucket
