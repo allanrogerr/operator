@@ -1,5 +1,4 @@
 name: Tenant Tests On Kind
-on: [workflow_dispatch]
 on:
   pull_request:
     branches: [ master ]
