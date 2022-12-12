@@ -49,7 +49,7 @@ function bootstrap_tenant() {
   done
 
   echo "Killing any current port-forward"
-  for pid in $(lsof -i :$localport | awk {'print $2'} | grep -o "\d*")
+  for pid in $(lsof -i :$localport | awk '{print $2}' | grep -o '\d*')
   do
     if [ -n "$pid" ] 
     then
@@ -98,7 +98,7 @@ function main() {
 
   setup_kind
 
-  if [ -n $lower_version ]
+  if [ -n "$lower_version" ]
   then
     # Test specific version of operator
     install_operator_version $lower_version
@@ -113,10 +113,10 @@ function main() {
 
   upload_dummy_data
 
-  if [ -n $higher_version ]
+  if [ -n "$upper_version" ]
   then
     # Test specific version of operator
-    install_operator_version $higher_version
+    install_operator_version $upper_version
   else
     # Test current branch
     install_operator

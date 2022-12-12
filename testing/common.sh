@@ -102,13 +102,13 @@ function install_operator() {
 
 function install_operator_version() {
   # Obtain release
-  VERSION="$1"
-  if [ ! -n "$VERSION" ]
+  version="$1"
+  if [ -z "$version" ]
   then
-    VERSION=$(curl https://api.github.com/repos/minio/operator/releases/latest | jq --raw-output '.tag_name | "\(.[1:])"')
+    version=$(curl https://api.github.com/repos/minio/operator/releases/latest | jq --raw-output '.tag_name | "\(.[1:])"')
   fi
-  echo "Target operator release: $VERSION"
-  sudo curl -#L https://github.com/minio/operator/releases/download/v$VERSION/kubectl-minio_$VERSION\_$OS\_$ARCH -o /usr/local/bin/kubectl-minio
+  echo "Target operator release: $version"
+  sudo curl -#L https://github.com/minio/operator/releases/download/v$version/kubectl-minio\_$version\_$OS\_$ARCH -o /usr/local/bin/kubectl-minio
   sudo chmod +x /usr/local/bin/kubectl-minio
 
   # Initialize the MinIO Kubernetes Operator
