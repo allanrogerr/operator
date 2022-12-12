@@ -23,13 +23,13 @@ source "${SCRIPT_DIR}/common.sh"
 
 lower_version="$1"
 upper_version="$2"
-namespace=tenant-lite
-tenant=storage-lite
-bucket=data
-dummy=dummy.data
-localport=9000
+namespace="tenant-lite"
+tenant="storage-lite"
+bucket="data"
+dummy="dummy.data"
+localport="9000"
 totalwait=0
-alias=minios3
+alias="minios3"
 
 # Preparing tenant for bucket manipulation
 function bootstrap_tenant() {
