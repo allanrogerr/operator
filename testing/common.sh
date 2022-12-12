@@ -113,7 +113,7 @@ function install_operator_version() {
   echo "Target operator release: $VERSION"
   sudo curl -#L https://github.com/minio/operator/releases/download/v$VERSION/kubectl-minio_$VERSION\_$OS\_$ARCH -o kubectl-minio
   sudo chmod +x kubectl-minio
-  sudo mv kubectl-minio /usr/local/bin/
+  mv kubectl-minio/ /usr/local/bin/
 
   # Initialize the MinIO Kubernetes Operator
   kubectl minio init
