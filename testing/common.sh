@@ -108,7 +108,7 @@ function install_operator_version() {
     version=$(curl https://api.github.com/repos/minio/operator/releases/latest | jq --raw-output '.tag_name | "\(.[1:])"')
   fi
   echo "Target operator release: $version"
-  sudo curl -#L "https://github.com/minio/operator/releases/download/v$version/kubectl-minio\_$version\_$OS\_$ARCH" -o /usr/local/bin/kubectl-minio
+  sudo curl -#L "https://github.com/minio/operator/releases/download/v"$version"/kubectl-minio_"$version"_"$OS"_"$ARCH -o /usr/local/bin/kubectl-minio
   sudo chmod +x /usr/local/bin/kubectl-minio
 
   # Initialize the MinIO Kubernetes Operator
