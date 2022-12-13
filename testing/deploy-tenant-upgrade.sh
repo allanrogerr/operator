@@ -66,22 +66,6 @@ function port_forward() {
   echo 'end - wait for port-forward to be completed'
 }
 
-# Preparing tenant for bucket manipulation
-function bootstrap_tenant() {
-  port_forward
-
-  # Obtain root credentials
-  TENANT_CONFIG_SECRET=$(kubectl -n $namespace get tenants $tenant -o jsonpath="{.spec.configuration.name}")
-  USER=$(kubectl -n $namespace get secrets "$TENANT_CONFIG_SECRET" -o go-template='{{index .data "config.env"|base64decode }}' | grep 'export MINIO_ROOT_USER="' | sed -e 's/export MINIO_ROOT_USER="//g' | sed -e 's/"//g')
-  PASSWORD=$(kubectl -n $namespace get secrets "$TENANT_CONFIG_SECRET" -o go-template='{{index .data "config.env"|base64decode }}' | grep 'export MINIO_ROOT_PASSWORD="' | sed -e 's/export MINIO_ROOT_PASSWORD="//g' | sed -e 's/"//g')
-
-  echo "Creating alias with user ${USER}"
-  mc alias set $alias https://localhost:$localport ${USER} ${PASSWORD} --insecure
-
-  echo "Creating bucket on tenant"
-  mc mb $alias/$bucket --insecure
-}
-
 # Upload dummy data to tenant bucket
 function upload_dummy_data() {
   port_forward
@@ -104,6 +88,22 @@ function download_dummy_data() {
     echo "Operator upgrade test failed"
     try false
   fi
+}
+
+# Preparing tenant for bucket manipulation
+function bootstrap_tenant() {
+  port_forward
+
+  # Obtain root credentials
+  TENANT_CONFIG_SECRET=$(kubectl -n $namespace get tenants $tenant -o jsonpath="{.spec.configuration.name}")
+  USER=$(kubectl -n $namespace get secrets "$TENANT_CONFIG_SECRET" -o go-template='{{index .data "config.env"|base64decode }}' | grep 'export MINIO_ROOT_USER="' | sed -e 's/export MINIO_ROOT_USER="//g' | sed -e 's/"//g')
+  PASSWORD=$(kubectl -n $namespace get secrets "$TENANT_CONFIG_SECRET" -o go-template='{{index .data "config.env"|base64decode }}' | grep 'export MINIO_ROOT_PASSWORD="' | sed -e 's/export MINIO_ROOT_PASSWORD="//g' | sed -e 's/"//g')
+
+  echo "Creating alias with user ${USER}"
+  mc alias set $alias https://localhost:$localport ${USER} ${PASSWORD} --insecure
+
+  echo "Creating bucket on tenant"
+  mc mb $alias/$bucket --insecure
 }
 
 function main() {
