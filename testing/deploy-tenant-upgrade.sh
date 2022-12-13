@@ -67,16 +67,7 @@ function port_forward() {
 }
 
 # Preparing tenant for bucket manipulation
-function bootstrap_tenant() {
-
-  port_forward
-
-  echo 'start - wait for port-forward to be completed'
-  sleep 15
-  echo 'end - wait for port-forward to be completed'
-}
-
-# Preparing tenant for bucket manipulation
+# shellcheck disable=SC2317
 function bootstrap_tenant() {
   port_forward
 
