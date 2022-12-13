@@ -49,6 +49,7 @@ function port_forward() {
   done
 
   echo "Killing any current port-forward"
+  lsof -i :$localport 
   for pid in $(lsof -i :$localport | awk '{print $2}' | grep -o '\d*')
   do
     if [ -n "$pid" ] 
