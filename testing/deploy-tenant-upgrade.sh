@@ -98,7 +98,7 @@ function download_dummy_data() {
   echo "Download dummy data from tenant bucket"
   mc cp $alias/$bucket/$dummy ${SCRIPT_DIR}/$dummy --insecure
 
-  if cmp -s "${SCRIPT_DIR}/deploy-tenant-upgrade.sh" "${SCRIPT_DIR}/$dummy"; then
+  if cmp "${SCRIPT_DIR}/deploy-tenant-upgrade.sh" "${SCRIPT_DIR}/$dummy"; then
     echo "Operator upgrade test complete; no issue found"
   else
     echo "Operator upgrade test failed"
