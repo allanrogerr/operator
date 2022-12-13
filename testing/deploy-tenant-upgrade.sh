@@ -30,6 +30,27 @@ dummy="dummy.data"
 localport="9000"
 alias="minios3"
 
+# Announce test
+function announce_test() {
+  local lower_text
+  local upper_text
+  if [ -n "$lower_version" ] 
+  then 
+    lower_text=$lower_version; 
+  else 
+    lower_text="latest Operator release"; 
+  fi
+
+  if [ -n "$upper_version" ] 
+  then 
+    upper_text=$upper_version; 
+  else 
+    upper_text="current branch of Operator"; 
+  fi
+
+  echo "## Testing upgrade of Operator from $lower_text to $upper_text ##"
+}
+
 # Port forward
 function port_forward() {
   totalwait=0
@@ -108,6 +129,8 @@ function download_dummy_data() {
 }
 
 function main() {
+  announce_test
+
   destroy_kind
 
   setup_kind
