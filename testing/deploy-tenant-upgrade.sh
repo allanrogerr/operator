@@ -28,11 +28,11 @@ tenant="storage-lite"
 bucket="data"
 dummy="dummy.data"
 localport="9000"
-totalwait=0
 alias="minios3"
 
 # Port forward
 function port_forward() {
+  totalwait=0
   echo 'Validating tenant pods are ready to serve'
   for pod in `kubectl --namespace $namespace --selector=v1.min.io/tenant=$tenant get pod -o json |  jq '.items[] | select(.metadata.name|contains("'$tenant'"))| .metadata.name' | sed 's/"//g'`; do
     while true; do
@@ -60,6 +60,10 @@ function port_forward() {
 
   echo "Establishing port-forward"
   kubectl port-forward service/$tenant-hl -n $namespace $localport:$localport &
+
+  echo 'start - wait for port-forward to be completed'
+  sleep 15
+  echo 'end - wait for port-forward to be completed'
 }
 
 # Preparing tenant for bucket manipulation
