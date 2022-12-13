@@ -53,7 +53,7 @@ function port_forward() {
   do
     if [ -n "$pid" ] 
     then
-      kill -9 $pid
+      sudo kill -9 $pid
       echo "Killed previous port-forward process using port $localport: $pid"
     fi
   done
