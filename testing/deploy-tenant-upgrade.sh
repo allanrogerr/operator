@@ -60,11 +60,11 @@ function port_forward() {
   done
 
   echo 'start - wait for port-forward to be completed'
-  sleep 15
+  sleep 60
   echo 'end - wait for port-forward to be completed'
 
   echo "Establishing port-forward"
-  kubectl port-forward service/$tenant-hl -n $namespace $localport:$localport &
+  kubectl port-forward service/$tenant-hl -n $namespace $localport &
 
   echo 'start - wait for port-forward to be completed'
   sleep 15
