@@ -156,6 +156,8 @@ jobs:
       - gotest
       - getdeps
       - govet
+      - test-tenant
+      - test-kes
     strategy:
       matrix:
         go-version: [ 1.18.x ]
