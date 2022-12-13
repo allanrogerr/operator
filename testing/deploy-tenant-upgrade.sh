@@ -49,8 +49,8 @@ function port_forward() {
   done
 
   echo "Killing any current port-forward"
-  lsof -i :$localport 
-  for pid in $(lsof -i :$localport | awk '{print $2}' | grep -o '\d*')
+  sudo lsof -i :$localport 
+  for pid in $(sudo lsof -i :$localport | awk '{print $2}' | grep -o '\d*')
   do
     if [ -n "$pid" ] 
     then
@@ -58,6 +58,10 @@ function port_forward() {
       echo "Killed previous port-forward process using port $localport: $pid"
     fi
   done
+
+  echo 'start - wait for port-forward to be completed'
+  sleep 15
+  echo 'end - wait for port-forward to be completed'
 
   echo "Establishing port-forward"
   kubectl port-forward service/$tenant-hl -n $namespace $localport:$localport &
