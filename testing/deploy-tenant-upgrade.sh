@@ -49,12 +49,11 @@ function port_forward() {
   done
 
   echo "Killing any current port-forward"
-  sudo lsof -i :$localport 
-  for pid in $(sudo lsof -i :$localport | awk '{print $2}' | uniq | grep -o '[0-9]*')
+  for pid in $(lsof -i :$localport | awk '{print $2}' | uniq | grep -o '[0-9]*')
   do
     if [ -n "$pid" ] 
     then
-      sudo kill -9 $pid
+      kill -9 $pid
       echo "Killed previous port-forward process using port $localport: $pid"
     fi
   done
