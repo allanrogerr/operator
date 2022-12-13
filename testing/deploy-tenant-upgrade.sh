@@ -66,32 +66,9 @@ function port_forward() {
   echo 'end - wait for port-forward to be completed'
 }
 
-# Upload dummy data to tenant bucket
-function upload_dummy_data() {
-  port_forward
-
-  echo "Uploading dummy data to tenant bucket"
-  cp ${SCRIPT_DIR}/deploy-tenant-upgrade.sh ${SCRIPT_DIR}/$dummy
-  mc cp ${SCRIPT_DIR}/$dummy $alias/$bucket/$dummy --insecure
-}
-
-# Download dummy data from tenant bucket
-function download_dummy_data() {
-  port_forward
-
-  echo "Download dummy data from tenant bucket"
-  mc cp $alias/$bucket/$dummy ${SCRIPT_DIR}/$dummy --insecure
-
-  if cmp "${SCRIPT_DIR}/deploy-tenant-upgrade.sh" "${SCRIPT_DIR}/$dummy"; then
-    echo "Operator upgrade test complete; no issue found"
-  else
-    echo "Operator upgrade test failed"
-    try false
-  fi
-}
-
 # Preparing tenant for bucket manipulation
 function bootstrap_tenant() {
+
   port_forward
 
   # Obtain root credentials
@@ -104,6 +81,32 @@ function bootstrap_tenant() {
 
   echo "Creating bucket on tenant"
   mc mb $alias/$bucket --insecure
+}
+
+# Upload dummy data to tenant bucket
+function upload_dummy_data() {
+
+  port_forward
+
+  echo "Uploading dummy data to tenant bucket"
+  cp ${SCRIPT_DIR}/deploy-tenant-upgrade.sh ${SCRIPT_DIR}/$dummy
+  mc cp ${SCRIPT_DIR}/$dummy $alias/$bucket/$dummy --insecure
+}
+
+# Download dummy data from tenant bucket
+function download_dummy_data() {
+  
+  port_forward
+
+  echo "Download dummy data from tenant bucket"
+  mc cp $alias/$bucket/$dummy ${SCRIPT_DIR}/$dummy --insecure
+
+  if cmp "${SCRIPT_DIR}/deploy-tenant-upgrade.sh" "${SCRIPT_DIR}/$dummy"; then
+    echo "Operator upgrade test complete; no issue found"
+  else
+    echo "Operator upgrade test failed"
+    try false
+  fi
 }
 
 function main() {
