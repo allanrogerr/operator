@@ -4,7 +4,7 @@ go 1.18
 
 require (
 	github.com/blang/semver/v4 v4.0.0
-	github.com/docker/cli v20.10.20+incompatible
+	github.com/docker/cli v20.10.22+incompatible
 	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/google/go-containerregistry v0.11.0
 	github.com/gorilla/mux v1.8.0
