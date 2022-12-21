@@ -1,5 +1,5 @@
 operator:
   image:
     repository: minio/operator
-    tag: noop
+    tag: v4.5.5
     pullPolicy: IfNotPresent
