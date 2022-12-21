@@ -12,8 +12,8 @@ tenant:
   name: minio1
   ## Registry location and Tag to download MinIO Server image
   image:
-    repository: minio/operator
-    tag: v4.5.4
+    repository: minio/tenant
+    tag: v4.5.3
     pullPolicy: IfNotPresent
   ## Customize any private registry image pull secret.
   ## currently only one secret registry is supported
