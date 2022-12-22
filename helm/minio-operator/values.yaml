@@ -15,7 +15,6 @@ operator:
   #     value: ""
   image:
     repository: minio/operator
-    registry: https://operator.min.io
     tag: v4.3.7
     pullPolicy: IfNotPresent
   imagePullSecrets: [ ]
