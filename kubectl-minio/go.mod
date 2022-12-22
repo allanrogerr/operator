@@ -7,7 +7,7 @@ replace github.com/minio/operator => ../
 require (
 	github.com/dustin/go-humanize v1.0.0
 	github.com/fatih/color v1.12.0
-	github.com/google/uuid v1.1.2
+	github.com/google/uuid v1.3.0
 	github.com/manifoldco/promptui v0.8.0
 	github.com/minio/operator v0.0.0-00010101000000-000000000000
 	github.com/olekukonko/tablewriter v0.0.4
