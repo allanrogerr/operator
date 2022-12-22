@@ -17,7 +17,7 @@ require (
 	github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring v0.60.1
 	github.com/prometheus-operator/prometheus-operator/pkg/client v0.60.1
 	github.com/stretchr/testify v1.8.0
-	github.com/tidwall/gjson v1.14.3
+	github.com/tidwall/gjson v1.14.4
 	golang.org/x/crypto v0.0.0-20221012134737-56aed061732a
 	golang.org/x/time v0.1.0
 	gopkg.in/yaml.v2 v2.4.0
