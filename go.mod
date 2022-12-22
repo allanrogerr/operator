@@ -4,7 +4,7 @@ go 1.17
 
 require (
 	github.com/docker/cli v0.0.0-20191017083524-a8ff7f821017
-	github.com/golang-jwt/jwt v3.2.1+incompatible
+	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/google/go-containerregistry v0.1.2
 	github.com/gorilla/mux v1.8.0
 	github.com/hashicorp/go-version v1.3.0
