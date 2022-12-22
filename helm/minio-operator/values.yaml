@@ -14,7 +14,7 @@ operator:
   #   - name: WATCHED_NAMESPACE
   #     value: ""
   image:
-    repository: minio/operator
+    repository: minio/operators
     tag: v4.3.8
     pullPolicy: IfNotPresent
   imagePullSecrets: [ ]
