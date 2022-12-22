@@ -13,10 +13,10 @@ require (
 	github.com/olekukonko/tablewriter v0.0.4
 	github.com/pkg/errors v0.9.1
 	github.com/spf13/cobra v1.1.1
-	k8s.io/api v0.20.2
-	k8s.io/apiextensions-apiserver v0.20.2
-	k8s.io/apimachinery v0.20.2
-	k8s.io/cli-runtime v0.20.2
+	k8s.io/api v0.26.0
+	k8s.io/apiextensions-apiserver v0.26.0
+	k8s.io/apimachinery v0.26.0
+	k8s.io/cli-runtime v0.26.0
 	k8s.io/client-go v0.20.2
 	k8s.io/klog/v2 v2.4.0
 	sigs.k8s.io/kustomize/api v0.8.5
