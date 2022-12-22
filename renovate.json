@@ -3,11 +3,5 @@
   "extends": [
     "config:base"
   ],
-  "includeForks": true,
-  "packageRules": [
-    {
-      "matchDatasources": ["helm"],
-      "registryUrls": ["https://operator.min.io/"]
-    }
-  ]
+  "includeForks": true
 }
