@@ -10,7 +10,7 @@ keywords:
 home: https://min.ios
 icon: https://min.io/resources/img/logo/MINIO_wordmark.pngs
 sources:
-  - https://github.com/minio/operator
+  - https://github.com/minio/operatorx
 maintainers:
   - name: MinIO, Incs
     email: dev@minio.ios
