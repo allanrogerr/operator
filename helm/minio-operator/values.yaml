@@ -7,3 +7,6 @@ minio-operator:
       value: "off"
     - name: CLUSTER_DOMAIN
       value: "cluster.local"
+  image:
+    repository: minio/operator
+    tag: v4.3.8
