@@ -3,9 +3,5 @@
   "extends": [
     "config:base"
   ],
-  "includeForks": true,
-  "packageRules": [{
-    "datasources": ["helm"],
-    "registryUrls": ["https://xoperator.min.io"]
-  }]
+  "includeForks": true
 }
