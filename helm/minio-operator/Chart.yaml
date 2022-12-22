@@ -1,17 +1,17 @@
 apiVersion: v2
 description: A Helm chart for MinIO Operator
-name: minio-operator123
-version: 4.3.8s
-appVersion: v4.3.8s
+name: minio-operator
+version: 4.3.8
+appVersion: v4.3.8
 keywords:
-  - storages
-  - object-storages
-  - S3s
-home: https://min.ios
-icon: https://min.io/resources/img/logo/MINIO_wordmark.pngs
+  - storage
+  - object-storage
+  - S3
+home: https://min.io
+icon: https://min.io/resources/img/logo/MINIO_wordmark.png
 sources:
-  - https://github.com/minio/operatorx
+  - https://github.com/minio/operator
 maintainers:
-  - name: MinIO, Incs
-    email: dev@minio.ios
+  - name: MinIO, Inc
+    email: dev@minio.io
 type: application
