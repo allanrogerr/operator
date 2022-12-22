@@ -13,7 +13,7 @@ operator:
   #     value: ""
   image:
     repository: minio/operator
-    registry: https://operator.min.io/
+    registry: operator.min.io
     tag: v4.5.4
     pullPolicy: IfNotPresent
   imagePullSecrets: [ ]
@@ -46,7 +46,7 @@ operator:
 console:
   image:
     repository: minio/console
-    registry: https://operator.min.io/
+    registry: operator.min.io
     tag: v0.22.1
     pullPolicy: IfNotPresent
   imagePullSecrets: [ ]
