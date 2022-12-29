@@ -1172,6 +1172,13 @@ func (t *Tenant) GetDomainHosts() []string {
 			if err != nil {
 				continue
 			}
+			// No slash after scheme (see https://pkg.go.dev/net/url#URL)
+			if u.Host == "" {
+				u, err = url.Parse("https://" + d)
+				if err != nil {
+					continue
+				}
+			}
 			// remove ports if any
 			hostParts := strings.Split(u.Host, ":")
 			hosts = append(hosts, hostParts[0])
