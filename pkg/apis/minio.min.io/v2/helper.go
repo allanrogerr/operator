@@ -1165,7 +1165,8 @@ func (t *Tenant) ValidateDomains() error {
 // GetDomainHosts returns a list of hosts in the .spec.features.domains.minio list to configure MINIO_DOMAIN
 func (t *Tenant) GetDomainHosts() []string {
 	if t.HasMinIODomains() {
-		globalDomainNames := ""
+		globalDomainNames := make([]string, 0)
+		hosts := make([]string, 0)
 		for _, domainName := range t.Spec.Features.Domains.Minio {
 			if _, ok := dns.IsDomainName(domainName); !ok {
 				continue
