@@ -1165,22 +1165,20 @@ func (t *Tenant) ValidateDomains() error {
 // GetDomainHosts returns a list of hosts in the .spec.features.domains.minio list to configure MINIO_DOMAIN
 func (t *Tenant) GetDomainHosts() []string {
 	if t.HasMinIODomains() {
-		domains := t.Spec.Features.Domains.Minio
-		var hosts []string
-		for _, d := range domains {
-			u, err := url.Parse(d)
-			if err != nil {
+		for _, domainName := range t.Spec.Features.Domains.Minio {
+			if _, ok := dns.IsDomainName(domainName); !ok {
 				continue
 			}
-			// No slash after scheme (see https://pkg.go.dev/net/url#URL)
-			if u.Host == "" {
-				u, err = url.Parse("https://" + d)
-				if err != nil {
-					continue
-				}
+			globalDomainNames = append(globalDomainNames, domainName)
+		}
+		sort.Strings(globalDomainNames)
+		lcpSuf := lcpSuffix(globalDomainNames)
+		for _, domainName := range globalDomainNames {
+			if domainName == lcpSuf && len(globalDomainNames) > 1 {
+				continue
 			}
 			// remove ports if any
-			hostParts := strings.Split(u.Host, ":")
+			hostParts := strings.Split(domainName, ":")
 			hosts = append(hosts, hostParts[0])
 		}
 		return hosts
@@ -1314,4 +1312,56 @@ func GetPgImage() string {
 		}
 	})
 	return pgDefaultImage
+}
+
+// Suffix returns the longest common suffix of the provided strings
+func lcpSuffix(strs []string) string {
+	return lcp(strs, false)
+}
+
+func lcp(strs []string, pre bool) string {
+	// short-circuit empty list
+	if len(strs) == 0 {
+		return ""
+	}
+	xfix := strs[0]
+	// short-circuit single-element list
+	if len(strs) == 1 {
+		return xfix
+	}
+	// compare first to rest
+	for _, str := range strs[1:] {
+		xfixl := len(xfix)
+		strl := len(str)
+		// short-circuit empty strings
+		if xfixl == 0 || strl == 0 {
+			return ""
+		}
+		// maximum possible length
+		maxl := xfixl
+		if strl < maxl {
+			maxl = strl
+		}
+		// compare letters
+		if pre {
+			// prefix, iterate left to right
+			for i := 0; i < maxl; i++ {
+				if xfix[i] != str[i] {
+					xfix = xfix[:i]
+					break
+				}
+			}
+		} else {
+			// suffix, iterate right to left
+			for i := 0; i < maxl; i++ {
+				xi := xfixl - i - 1
+				si := strl - i - 1
+				if xfix[xi] != str[si] {
+					xfix = xfix[xi+1:]
+					break
+				}
+			}
+		}
+	}
+	return xfix
 }
