@@ -145,7 +145,6 @@ func minioEnvironmentVars(t *miniov2.Tenant, skipEnvVars map[string][]byte, opVe
 
 	// Set the redirect url for console
 	if t.HasConsoleDomains() {
-		consoleDomain := t.Spec.Features.Domains.Console
 		schema := "http"
 		if t.TLS() {
 			schema = "https"

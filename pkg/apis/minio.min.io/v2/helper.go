@@ -30,7 +30,6 @@ import (
 	"os"
 	"path"
 	"reflect"
-	"regexp"
 	"sort"
 	"strconv"
 	"strings"
@@ -1144,7 +1143,7 @@ func (t *Tenant) ValidateDomains() error {
 		if len(domains) != 0 {
 			for _, domainName := range domains {
 				// URL endpoints are not allowed in domain inputs
-				if ok, _ := regexp.MatchString("^https?://", domainName); ok {
+				if strings.HasPrefix(domainName, "http") {
 					return fmt.Errorf("url endpoint `%s` is not allowed as a domain input", domainName)
 				}
 				// A valid domain name
@@ -1174,7 +1173,7 @@ func (t *Tenant) GetDomainHosts() []string {
 		if len(domains) != 0 {
 			for _, domainName := range domains {
 				// URL endpoints are not allowed in domain inputs
-				if ok, _ := regexp.MatchString("^https?://", domainName); ok {
+				if strings.HasPrefix(domainName, "http") {
 					continue
 				}
 				// A valid domain name
