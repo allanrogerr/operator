@@ -130,13 +130,12 @@ func minioEnvironmentVars(t *miniov2.Tenant, skipEnvVars map[string][]byte, opVe
 	// If no specific server URL is specified we will specify the internal k8s url, but if a list of domains was
 	// provided we will use the first domain.
 	serverURL := t.MinIOServerEndpoint()
-	if t.HasMinIODomains() {
-		// Provide adequate scheme to server URL if a list of domains is available
-		scheme := "http"
+	if !strings.HasPrefix(serverURL, "http") {
+		useSchema := "http"
 		if t.TLS() {
-			scheme = "https"
+			useSchema = "https"
 		}
-		serverURL = fmt.Sprintf("%s://%s", scheme, t.Spec.Features.Domains.Minio[0])
+		serverURL = fmt.Sprintf("%s://%s", useSchema, serverURL)
 	}
 	envVarsMap[miniov2.MinIOServerURL] = corev1.EnvVar{
 		Name:  miniov2.MinIOServerURL,

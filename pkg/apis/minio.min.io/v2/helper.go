@@ -30,6 +30,7 @@ import (
 	"os"
 	"path"
 	"reflect"
+	"regexp"
 	"sort"
 	"strconv"
 	"strings"
@@ -1165,25 +1166,33 @@ func (t *Tenant) ValidateDomains() error {
 // GetDomainHosts returns a list of hosts in the .spec.features.domains.minio list to configure MINIO_DOMAIN
 func (t *Tenant) GetDomainHosts() []string {
 	if t.HasMinIODomains() {
-		globalDomainNames := make([]string, 0)
 		hosts := make([]string, 0)
-		for _, domainName := range t.Spec.Features.Domains.Minio {
-			if _, ok := dns.IsDomainName(domainName); !ok {
-				continue
+		domains := t.Spec.Features.Domains.Minio
+		if len(domains) != 0 {
+			for _, domainName := range domains {
+				_, err := url.Parse(domainName)
+				if err != nil {
+					continue
+				}
+
+				if _, ok := dns.IsDomainName(domainName); !ok {
+					continue
+				}
 			}
-			globalDomainNames = append(globalDomainNames, domainName)
-		}
-		sort.Strings(globalDomainNames)
-		lcpSuf := lcpSuffix(globalDomainNames)
-		for _, domainName := range globalDomainNames {
-			if domainName == lcpSuf && len(globalDomainNames) > 1 {
-				continue
+			sort.Strings(domains)
+			lcpSuf := lcpSuffix(domains)
+			for _, domainName := range domains {
+				if domainName == lcpSuf && len(domains) > 1 {
+					continue
+				}
+				// remove ports if any
+				regexpSchema := regexp.MustCompile(`^https?://`)
+				hostParts := strings.Split(regexpSchema.ReplaceAllString(domainName, ""), ":")
+				hosts = append(hosts, hostParts[0])
 			}
-			// remove ports if any
-			hostParts := strings.Split(domainName, ":")
-			hosts = append(hosts, hostParts[0])
+			sort.Strings(hosts)
+			return hosts
 		}
-		return hosts
 	}
 	return nil
 }
