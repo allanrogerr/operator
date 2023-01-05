@@ -149,7 +149,7 @@ func minioEnvironmentVars(t *miniov2.Tenant, skipEnvVars map[string][]byte, opVe
 		if t.TLS() {
 			schema = "https"
 		}
-		consoleDomain = fmt.Sprintf("%s://%s", schema, t.Spec.Features.Domains.Console)
+		consoleDomain := fmt.Sprintf("%s://%s", schema, t.Spec.Features.Domains.Console)
 		envVarsMap[miniov2.MinIOBrowserRedirectURL] = corev1.EnvVar{
 			Name:  miniov2.MinIOBrowserRedirectURL,
 			Value: consoleDomain,
