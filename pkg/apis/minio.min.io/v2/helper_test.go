@@ -338,8 +338,8 @@ func TestTenant_GetDomainHosts(t1 *testing.T) {
 					Features: &Features{
 						Domains: &TenantDomains{
 							Minio: []string{
-								"https://domain1.com:8080",
-								"http://domain2.com",
+								"domain1.com:8080",
+								"domain2.com",
 							},
 						},
 					},
@@ -460,8 +460,8 @@ func TestTenant_ValidateDomains(t1 *testing.T) {
 					Features: &Features{
 						Domains: &TenantDomains{
 							Minio: []string{
-								"https://domain1.com:8080",
-								"http://domain2.com",
+								"domain1.com:8080",
+								"domain2.com",
 							},
 						},
 					},
@@ -492,8 +492,8 @@ func TestTenant_ValidateDomains(t1 *testing.T) {
 					Features: &Features{
 						Domains: &TenantDomains{
 							Minio: []string{
-								"http://domain2.com",
-								"http://domain2.com",
+								"domain2.com",
+								"other.domain2.com:8080",
 							},
 						},
 					},

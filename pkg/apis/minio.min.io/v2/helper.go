@@ -1139,22 +1139,25 @@ func (t *Tenant) HasConsoleDomains() bool {
 // ValidateDomains checks the validity of the domains configured on the tenant
 func (t *Tenant) ValidateDomains() error {
 	if t.HasMinIODomains() {
+		var validDomains []string
 		domains := t.Spec.Features.Domains.Minio
 		if len(domains) != 0 {
 			for _, domainName := range domains {
-				_, err := url.Parse(domainName)
-				if err != nil {
-					return err
+				// URL endpoints are not allowed in domain inputs
+				if ok, _ := regexp.MatchString("^https?://", domainName); ok {
+					return fmt.Errorf("url endpoint `%s` is not allowed as a domain input", domainName)
 				}
-
+				// A valid domain name
 				if _, ok := dns.IsDomainName(domainName); !ok {
 					return fmt.Errorf("invalid domain `%s`", domainName)
 				}
+				// Remove ports if any
+				validDomains = append(validDomains, strings.Split(domainName, ":")[0])
 			}
-			sort.Strings(domains)
-			lcpSuf := lcpSuffix(domains)
-			for _, domainName := range domains {
-				if domainName == lcpSuf && len(domains) > 1 {
+			sort.Strings(validDomains)
+			lcpSuf := lcpSuffix(validDomains)
+			for _, domainName := range validDomains {
+				if domainName == lcpSuf && len(validDomains) > 1 {
 					return fmt.Errorf("overlapping domains `%s` not allowed", domainName)
 				}
 			}
@@ -1166,32 +1169,29 @@ func (t *Tenant) ValidateDomains() error {
 // GetDomainHosts returns a list of hosts in the .spec.features.domains.minio list to configure MINIO_DOMAIN
 func (t *Tenant) GetDomainHosts() []string {
 	if t.HasMinIODomains() {
-		hosts := make([]string, 0)
+		var validDomains []string
 		domains := t.Spec.Features.Domains.Minio
 		if len(domains) != 0 {
 			for _, domainName := range domains {
-				_, err := url.Parse(domainName)
-				if err != nil {
+				// URL endpoints are not allowed in domain inputs
+				if ok, _ := regexp.MatchString("^https?://", domainName); ok {
 					continue
 				}
-
+				// A valid domain name
 				if _, ok := dns.IsDomainName(domainName); !ok {
 					continue
 				}
+				// Remove ports if any
+				validDomains = append(validDomains, strings.Split(domainName, ":")[0])
 			}
-			sort.Strings(domains)
-			lcpSuf := lcpSuffix(domains)
-			for _, domainName := range domains {
-				if domainName == lcpSuf && len(domains) > 1 {
+			sort.Strings(validDomains)
+			lcpSuf := lcpSuffix(validDomains)
+			for _, domainName := range validDomains {
+				if domainName == lcpSuf && len(validDomains) > 1 {
 					continue
 				}
-				// remove ports if any
-				regexpSchema := regexp.MustCompile(`^https?://`)
-				hostParts := strings.Split(regexpSchema.ReplaceAllString(domainName, ""), ":")
-				hosts = append(hosts, hostParts[0])
 			}
-			sort.Strings(hosts)
-			return hosts
+			return validDomains
 		}
 	}
 	return nil
