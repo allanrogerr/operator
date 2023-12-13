@@ -20,7 +20,6 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"log"
 	"strconv"
 	"strings"
 
@@ -219,7 +218,6 @@ func validateCapacity(value string) error {
 		}
 		return err
 	}
-	log.Println("capacity.Value()", capacity.Value(), capacity.Sign())
 	if capacity.Sign() <= 0 {
 		return errors.New("capacity needs to be greater than zero")
 	}

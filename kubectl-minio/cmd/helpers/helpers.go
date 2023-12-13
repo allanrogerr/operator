@@ -19,7 +19,6 @@ import (
 	"bytes"
 	"context"
 	"io"
-	"log"
 	"os"
 	"os/exec"
 	"regexp"
@@ -185,7 +184,6 @@ func CapacityPerVolume(capacity string, volumes int32) (*resource.Quantity, erro
 	if err != nil {
 		return nil, err
 	}
-	log.Println("totalQuantity", totalQuantity.Sign(), totalQuantity.Value())
 	if totalQuantity.Sign() <= 0 {
 		return nil, errors.New("capacity per volume needs to be greater than zero")
 	}
