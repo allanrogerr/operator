@@ -19,6 +19,7 @@ import (
 	"bytes"
 	"context"
 	"io"
+	"log"
 	"os"
 	"os/exec"
 	"regexp"
@@ -180,10 +181,13 @@ func VolumesPerServer(volumes, servers int32) int32 {
 // divide total capacity by total drives to extract capacity per
 // volume.
 func CapacityPerVolume(capacity string, volumes int32) (*resource.Quantity, error) {
+	log.Println("capacity", capacity)
 	totalQuantity, err := resource.ParseQuantity(capacity)
 	if err != nil {
+		log.Println(err.Error())
 		return nil, err
 	}
+	log.Println("totalQuantity.Sign()", totalQuantity.Sign())
 	if totalQuantity.Sign() <= 0 {
 		return nil, errors.New("capacity per volume needs to be greater than zero")
 	}
