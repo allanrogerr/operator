@@ -111,9 +111,12 @@ func storageClass(sc string) *string {
 // NewTenant will return a new Tenant for a MinIO Operator
 func NewTenant(opts *TenantOptions, userSecret *v1.Secret) (*miniov2.Tenant, error) {
 	autoCert := !opts.DisableTLS
-	volumesPerServer := opts.VolumesPerServer
-	if volumesPerServer == 0 {
-		volumesPerServer = helpers.VolumesPerServer(opts.Volumes, opts.Servers)
+	// Derive Volumes or VolumesPerServer in the absence of the other
+	// Exclusively either variable is guaranteed to exist
+	if opts.Volumes == 0 {
+		opts.Volumes = opts.VolumesPerServer * opts.Servers
+	} else {
+		opts.VolumesPerServer = helpers.VolumesPerServer(opts.Volumes, opts.Servers)
 	}
 	capacityPerVolume, err := helpers.CapacityPerVolume(opts.Capacity, opts.Volumes)
 	if err != nil {
@@ -138,7 +141,7 @@ func NewTenant(opts *TenantOptions, userSecret *v1.Secret) (*miniov2.Tenant, err
 				Console: opts.ExposeConsoleService,
 				MinIO:   opts.ExposeMinioService,
 			},
-			Pools:           []miniov2.Pool{Pool(opts, volumesPerServer, *capacityPerVolume)},
+			Pools:           []miniov2.Pool{Pool(opts, opts.VolumesPerServer, *capacityPerVolume)},
 			RequestAutoCert: &autoCert,
 			Mountpath:       helpers.MinIOMountPath,
 			KES:             tenantKESConfig(opts.Name, opts.KmsSecret, opts.KesImage),
