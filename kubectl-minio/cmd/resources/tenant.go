@@ -111,7 +111,10 @@ func storageClass(sc string) *string {
 // NewTenant will return a new Tenant for a MinIO Operator
 func NewTenant(opts *TenantOptions, userSecret *v1.Secret) (*miniov2.Tenant, error) {
 	autoCert := !opts.DisableTLS
-	volumesPerServer := helpers.VolumesPerServer(opts.Volumes, opts.Servers)
+	volumesPerServer := opts.VolumesPerServer
+	if volumesPerServer == 0 {
+		volumesPerServer = helpers.VolumesPerServer(opts.Volumes, opts.Servers)
+	}
 	capacityPerVolume, err := helpers.CapacityPerVolume(opts.Capacity, opts.Volumes)
 	if err != nil {
 		return nil, err

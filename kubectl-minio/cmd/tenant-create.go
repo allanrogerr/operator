@@ -189,7 +189,7 @@ func (c *createCmd) populateInteractiveTenant() error {
 		c.tenantOpts.VolumesPerServer = int32(helpers.AskNumber("Volumes per server", greaterThanZero))
 	}
 	c.tenantOpts.NS = helpers.AskQuestion("Namespace", validateEmptyInput)
-	c.tenantOpts.Capacity = helpers.AskQuestion("Capacity", validateCapacity)
+	c.tenantOpts.Capacity = helpers.AskQuestion("Capacity", validateQuantity)
 	if err := c.tenantOpts.Validate(); err != nil {
 		return err
 	}
@@ -207,7 +207,7 @@ func validateEmptyInput(value string) error {
 	return nil
 }
 
-func validateCapacity(value string) error {
+func validateQuantity(value string) error {
 	if err := validateEmptyInput(value); err != nil {
 		return err
 	}
