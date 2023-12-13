@@ -122,7 +122,7 @@ func NewTenant(opts *TenantOptions, userSecret *v1.Secret) (*miniov2.Tenant, err
 	} else {
 		opts.VolumesPerServer = helpers.VolumesPerServer(opts.Volumes, opts.Servers)
 	}
-	log.Println("capacityPerVolume")
+	log.Println("capacityPerVolume", opts.Capacity, opts.Volumes)
 	capacityPerVolume, err := helpers.CapacityPerVolume(opts.Capacity, opts.Volumes)
 	if err != nil {
 		return nil, err
