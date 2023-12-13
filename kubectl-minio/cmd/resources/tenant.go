@@ -127,7 +127,7 @@ func NewTenant(opts *TenantOptions, userSecret *v1.Secret) (*miniov2.Tenant, err
 	if err != nil {
 		return nil, err
 	}
-	log.Println("capacityPerVolume.String(): " + capacityPerVolume.String())
+	log.Println("capacityPerVolume.String(): "+capacityPerVolume.String(), capacityPerVolume.Sign())
 
 	t := &miniov2.Tenant{
 		TypeMeta: metav1.TypeMeta{
