@@ -68,12 +68,15 @@ func (t TenantOptions) Validate() error {
 	if t.Capacity == "" {
 		return errors.New("--capacity flag is required")
 	}
-	_, err := resource.ParseQuantity(t.Capacity)
+	capacity, err := resource.ParseQuantity(t.Capacity)
 	if err != nil {
 		if err == resource.ErrFormatWrong {
 			return errors.New("--capacity flag is incorrectly formatted. Use a suffix like 'T' or 'Ti' only")
 		}
 		return err
+	}
+	if capacity.Sign() <= 0 {
+		return errors.New("--capacity needs to be greater than zero")
 	}
 	if t.Volumes%t.Servers != 0 {
 		return errors.New("--volumes should be a multiple of --servers")

@@ -211,7 +211,16 @@ func validateCapacity(value string) error {
 	if err := validateEmptyInput(value); err != nil {
 		return err
 	}
-	_, err := resource.ParseQuantity(value)
+	capacity, err := resource.ParseQuantity(value)
+	if err != nil {
+		if err == resource.ErrFormatWrong {
+			return errors.New("capacity flag is incorrectly formatted. Use a suffix like 'T' or 'Ti' only")
+		}
+		return err
+	}
+	if capacity.Sign() <= 0 {
+		return errors.New("capacity needs to be greater than zero")
+	}
 	return err
 }
 
