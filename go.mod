@@ -60,6 +60,7 @@ require (
 require (
 	github.com/go-test/deep v1.1.0
 	github.com/minio/kes-go v0.2.1
+	github.com/minio/madmin-go/v2 v2.2.1
 	golang.org/x/mod v0.14.0
 	sigs.k8s.io/controller-runtime v0.16.3
 )

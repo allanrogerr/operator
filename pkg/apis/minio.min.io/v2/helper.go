@@ -23,6 +23,7 @@ import (
 	"crypto/x509"
 	"errors"
 	"fmt"
+	"github.com/minio/madmin-go/v2"
 	"io"
 	"net"
 	"net/http"
@@ -46,7 +47,6 @@ import (
 	"k8s.io/klog/v2"
 
 	"github.com/golang-jwt/jwt"
-	"github.com/minio/madmin-go/v3"
 	"github.com/minio/minio-go/v7"
 	"github.com/minio/minio-go/v7/pkg/credentials"
 )
@@ -850,7 +850,7 @@ func (t *Tenant) Validate() error {
 		case t.HasGCPCredentialSecretForKES() && !t.HasGCPWorkloadIdentityPoolForKES():
 			return errors.New("please set 'gcpWorkloadIdentityPool' to enable fleet workload identity")
 		case t.HasGCPWorkloadIdentityPoolForKES() && !t.HasGCPCredentialSecretForKES():
-			return errors.New("plese set the 'gcpCredentialSecretName' to enable fleet workload identity")
+			return errors.New("please set the 'gcpCredentialSecretName' to enable fleet workload identity")
 		default:
 		}
 	}
