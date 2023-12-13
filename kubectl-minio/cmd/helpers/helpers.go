@@ -187,7 +187,7 @@ func CapacityPerVolume(capacity string, volumes int32) (*resource.Quantity, erro
 		log.Println(err.Error())
 		return nil, err
 	}
-	log.Println("totalQuantity.Sign()", totalQuantity.Sign())
+	log.Println("totalQuantity.Sign()", totalQuantity.Sign(), totalQuantity.String())
 	if totalQuantity.Sign() <= 0 {
 		return nil, errors.New("capacity per volume needs to be greater than zero")
 	}
