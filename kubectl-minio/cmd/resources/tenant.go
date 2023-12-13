@@ -17,6 +17,7 @@ package resources
 
 import (
 	"errors"
+	"log"
 
 	"github.com/minio/kubectl-minio/cmd/helpers"
 	operator "github.com/minio/operator/pkg/apis/minio.min.io"
@@ -125,6 +126,7 @@ func NewTenant(opts *TenantOptions, userSecret *v1.Secret) (*miniov2.Tenant, err
 	if err != nil {
 		return nil, err
 	}
+	log.Println("capacityPerVolume.String(): " + capacityPerVolume.String())
 
 	t := &miniov2.Tenant{
 		TypeMeta: metav1.TypeMeta{
