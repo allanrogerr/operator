@@ -51,7 +51,7 @@ func newTenantExpandCmd(out io.Writer, errOut io.Writer) *cobra.Command {
 	v := &expandCmd{out: out, errOut: errOut}
 
 	cmd := &cobra.Command{
-		Use:     "expand <TENANTNAME> --pool <POOLNAME> --servers <NSERVERS> --volumes <NVOLUMES> --capacity <SIZE> --namespace <TENANTNS>",
+		Use:     "expand <TENANTNAME> --pool <POOLNAME> --servers <NSERVERS> ( --volumes <NVOLUMES> | --volumes-per-server <NVOLUMESPERSERVER> ) --capacity <SIZE> --namespace <TENANTNS>",
 		Short:   "Add capacity to existing tenant",
 		Long:    expandDesc,
 		Example: expandExample,
@@ -73,12 +73,12 @@ func newTenantExpandCmd(out io.Writer, errOut io.Writer) *cobra.Command {
 	f.StringVarP(&v.tenantOpts.PoolName, "pool", "p", "", "name for this pool expansion")
 	f.Int32Var(&v.tenantOpts.Servers, "servers", 0, "total number of pods to add to tenant")
 	f.Int32Var(&v.tenantOpts.Volumes, "volumes", 0, "total number of volumes to add to tenant")
+	f.Int32Var(&v.tenantOpts.VolumesPerServer, "volumes-per-server", 0, "number of volumes in each server in the MinIO tenant")
 	f.StringVar(&v.tenantOpts.Capacity, "capacity", "", "total raw capacity to add to tenant, e.g. 16Ti")
 	f.StringVarP(&v.tenantOpts.StorageClass, "storage-class", "s", helpers.DefaultStorageclass, "storage class for the expanded MinIO tenant pool (can be different than original pool)")
 	f.BoolVarP(&v.output, "output", "o", false, "generate MinIO tenant yaml with expansion details")
 
 	cmd.MarkFlagRequired("servers")
-	cmd.MarkFlagRequired("volumes")
 	cmd.MarkFlagRequired("capacity")
 	return cmd
 }
@@ -123,7 +123,10 @@ func (v *expandCmd) run() error {
 		return err
 	}
 	currentCapacity := helpers.TotalCapacity(*t)
-	volumesPerServer := helpers.VolumesPerServer(v.tenantOpts.Volumes, v.tenantOpts.Servers)
+	volumesPerServer := v.tenantOpts.VolumesPerServer
+	if volumesPerServer == 0 {
+		volumesPerServer = helpers.VolumesPerServer(v.tenantOpts.Volumes, v.tenantOpts.Servers)
+	}
 	capacityPerVolume, err := helpers.CapacityPerVolume(v.tenantOpts.Capacity, v.tenantOpts.Volumes)
 	if err != nil {
 		return err

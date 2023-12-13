@@ -55,7 +55,7 @@ func newTenantCreateCmd(out io.Writer, errOut io.Writer) *cobra.Command {
 	c := &createCmd{out: out, errOut: errOut}
 
 	cmd := &cobra.Command{
-		Use:     "create <TENANTNAME> --pool <POOLNAME> --servers <NSERVERS> --volumes <NVOLUMES> --capacity <SIZE> --namespace <TENANTNS>",
+		Use:     "create <TENANTNAME> --pool <POOLNAME> --servers <NSERVERS> ( --volumes <NVOLUMES> | --volumes-per-server <NVOLUMESPERSERVER> ) --capacity <SIZE> --namespace <TENANTNS>",
 		Short:   "Create a MinIO tenant",
 		Long:    createDesc,
 		Example: createExample,
@@ -80,6 +80,7 @@ func newTenantCreateCmd(out io.Writer, errOut io.Writer) *cobra.Command {
 	f.StringVarP(&c.tenantOpts.PoolName, "pool", "p", "", "name for this pool")
 	f.Int32Var(&c.tenantOpts.Servers, "servers", 0, "total number of pods in MinIO tenant")
 	f.Int32Var(&c.tenantOpts.Volumes, "volumes", 0, "total number of volumes in the MinIO tenant")
+	f.Int32Var(&c.tenantOpts.VolumesPerServer, "volumes-per-server", 0, "number of volumes in each server in the MinIO tenant")
 	f.StringVar(&c.tenantOpts.Capacity, "capacity", "", "total raw capacity of MinIO tenant in this pool, e.g. 16Ti")
 	f.StringVarP(&c.tenantOpts.NS, "namespace", "n", "", "k8s namespace for this MinIO tenant")
 	f.StringVarP(&c.tenantOpts.StorageClass, "storage-class", "s", helpers.DefaultStorageclass, "storage class for this MinIO tenant")
@@ -182,7 +183,11 @@ func (c *createCmd) populateInteractiveTenant() error {
 	c.tenantOpts.Name = helpers.AskQuestion("Tenant name", helpers.CheckValidTenantName)
 	c.tenantOpts.ConfigurationSecretName = fmt.Sprintf("%s-env-configuration", c.tenantOpts.Name)
 	c.tenantOpts.Servers = int32(helpers.AskNumber("Total of servers", greaterThanZero))
-	c.tenantOpts.Volumes = int32(helpers.AskNumber("Total of volumes", greaterThanZero))
+	if helpers.Ask("Define `Total of volumes`?") {
+		c.tenantOpts.Volumes = int32(helpers.AskNumber("Total of volumes", greaterThanZero))
+	} else {
+		c.tenantOpts.VolumesPerServer = int32(helpers.AskNumber("Volumes per server", greaterThanZero))
+	}
 	c.tenantOpts.NS = helpers.AskQuestion("Namespace", validateEmptyInput)
 	c.tenantOpts.Capacity = helpers.AskQuestion("Capacity", validateCapacity)
 	if err := c.tenantOpts.Validate(); err != nil {

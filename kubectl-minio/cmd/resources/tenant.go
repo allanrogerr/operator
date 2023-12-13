@@ -33,6 +33,7 @@ type TenantOptions struct {
 	ConfigurationSecretName string
 	Servers                 int32
 	Volumes                 int32
+	VolumesPerServer        int32
 	Capacity                string
 	NS                      string
 	Image                   string
@@ -55,8 +56,14 @@ func (t TenantOptions) Validate() error {
 	if t.Servers <= 0 {
 		return errors.New("--servers is required. Specify a value greater than or equal to 1")
 	}
-	if t.Volumes <= 0 {
-		return errors.New("--volumes is required. Specify a positive value")
+	if t.Volumes <= 0 || t.VolumesPerServer <= 0 {
+		return errors.New("--volumes or --volumes-per-server is required. Specify a positive value")
+	}
+	if t.Volumes > 0 && t.VolumesPerServer > 0 {
+		return errors.New("only either --volumes or --volumes-per-server may be specified")
+	}
+	if t.VolumesPerServer > 0 {
+		t.Volumes = t.VolumesPerServer * t.Servers
 	}
 	if t.Capacity == "" {
 		return errors.New("--capacity flag is required")
@@ -64,7 +71,7 @@ func (t TenantOptions) Validate() error {
 	_, err := resource.ParseQuantity(t.Capacity)
 	if err != nil {
 		if err == resource.ErrFormatWrong {
-			return errors.New("--capacity flag is incorrectly formatted. Please use suffix like 'T' or 'Ti' only")
+			return errors.New("--capacity flag is incorrectly formatted. Use a suffix like 'T' or 'Ti' only")
 		}
 		return err
 	}
