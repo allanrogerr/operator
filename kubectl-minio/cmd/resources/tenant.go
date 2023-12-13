@@ -56,8 +56,8 @@ func (t TenantOptions) Validate() error {
 	if t.Servers <= 0 {
 		return errors.New("--servers is required. Specify a value greater than or equal to 1")
 	}
-	if t.Volumes <= 0 || t.VolumesPerServer <= 0 {
-		return errors.New("--volumes or --volumes-per-server is required. Specify a positive value")
+	if t.Volumes <= 0 && t.VolumesPerServer <= 0 {
+		return errors.New("--volumes or --volumes-per-server is required. Specify either with a value greater than or equal to 1")
 	}
 	if t.Volumes > 0 && t.VolumesPerServer > 0 {
 		return errors.New("only either --volumes or --volumes-per-server may be specified")
