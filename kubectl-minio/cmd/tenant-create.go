@@ -60,7 +60,7 @@ func newTenantCreateCmd(out io.Writer, errOut io.Writer) *cobra.Command {
 		Long:    createDesc,
 		Example: createExample,
 		Args: func(cmd *cobra.Command, args []string) error {
-			// The disable-tls parameter default value is false, we cannot rely on the default value binded to the tenantOpts.DisableTLS variable
+			// The disable-tls parameter default value is false, we cannot rely on the default value bound to the tenantOpts.DisableTLS variable
 			// to identify if the parameter --disable-tls was actually set on the command line.
 			// regardless of which value is being set to the flag, if the flag and ONLY if the flag is present, then we disable TLS
 			c.tenantOpts.DisableTLS = cmd.Flags().Lookup("disable-tls").Changed

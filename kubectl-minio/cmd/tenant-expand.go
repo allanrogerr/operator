@@ -122,9 +122,12 @@ func (v *expandCmd) run() error {
 		return err
 	}
 	currentCapacity := helpers.TotalCapacity(*t)
-	volumesPerServer := v.tenantOpts.VolumesPerServer
-	if volumesPerServer == 0 {
-		volumesPerServer = helpers.VolumesPerServer(v.tenantOpts.Volumes, v.tenantOpts.Servers)
+	// Derive Volumes or VolumesPerServer in the absence of the other
+	// Exclusively either variable is guaranteed to exist
+	if v.tenantOpts.Volumes == 0 {
+		v.tenantOpts.Volumes = v.tenantOpts.VolumesPerServer * v.tenantOpts.Servers
+	} else {
+		v.tenantOpts.VolumesPerServer = helpers.VolumesPerServer(v.tenantOpts.Volumes, v.tenantOpts.Servers)
 	}
 	capacityPerVolume, err := helpers.CapacityPerVolume(v.tenantOpts.Capacity, v.tenantOpts.Volumes)
 	if err != nil {
@@ -136,7 +139,7 @@ func (v *expandCmd) run() error {
 		v.tenantOpts.PoolName = resources.GeneratePoolName(len(t.Spec.Pools))
 	}
 
-	t.Spec.Pools = append(t.Spec.Pools, resources.Pool(&v.tenantOpts, volumesPerServer, *capacityPerVolume))
+	t.Spec.Pools = append(t.Spec.Pools, resources.Pool(&v.tenantOpts, v.tenantOpts.VolumesPerServer, *capacityPerVolume))
 	expandedCapacity := helpers.TotalCapacity(*t)
 	if !v.output {
 		fmt.Printf(Bold(fmt.Sprintf("\nExpanding Tenant '%s/%s' from %s to %s\n\n", t.ObjectMeta.Name, t.ObjectMeta.Namespace, currentCapacity, expandedCapacity)))

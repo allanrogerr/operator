@@ -80,6 +80,10 @@ func (t TenantOptions) Validate() error {
 	if t.Volumes%t.Servers != 0 {
 		return errors.New("--volumes should be a multiple of --servers")
 	}
+	_, err = helpers.CapacityPerVolume(t.Capacity, t.Volumes)
+	if err != nil {
+		return err
+	}
 	return nil
 }
 
