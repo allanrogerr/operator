@@ -183,7 +183,7 @@ func (c *createCmd) populateInteractiveTenant() error {
 	c.tenantOpts.Name = helpers.AskQuestion("Tenant name", helpers.CheckValidTenantName)
 	c.tenantOpts.ConfigurationSecretName = fmt.Sprintf("%s-env-configuration", c.tenantOpts.Name)
 	c.tenantOpts.Servers = int32(helpers.AskNumber("Total of servers", greaterThanZero))
-	if helpers.Ask("Define `Total of volumes`?") {
+	if helpers.Ask("Define 'Total of volumes'") {
 		c.tenantOpts.Volumes = int32(helpers.AskNumber("Total of volumes", greaterThanZero))
 	} else {
 		c.tenantOpts.VolumesPerServer = int32(helpers.AskNumber("Volumes per server", greaterThanZero))
@@ -197,7 +197,7 @@ func (c *createCmd) populateInteractiveTenant() error {
 	c.tenantOpts.ExposeMinioService = helpers.Ask("Expose Minio Service")
 	c.tenantOpts.ExposeConsoleService = helpers.Ask("Expose Console Service")
 	c.tenantOpts.EnableSFTP = helpers.Ask("Enable SFTP")
-	c.tenantOpts.DisableAntiAffinity = helpers.Ask("Disable anti-affinity (unsupported in production environment)")
+	c.tenantOpts.DisableAntiAffinity = helpers.Ask("Disable Anti-Affinity (unsupported in production environment)")
 	return nil
 }
 
