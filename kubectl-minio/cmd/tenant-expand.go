@@ -75,6 +75,7 @@ func newTenantExpandCmd(out io.Writer, errOut io.Writer) *cobra.Command {
 	f.Int32Var(&v.tenantOpts.VolumesPerServer, "volumes-per-server", 0, "number of volumes in each server in the MinIO tenant")
 	f.StringVar(&v.tenantOpts.Capacity, "capacity", "", "total raw capacity to add to tenant, e.g. 16Ti")
 	f.StringVarP(&v.tenantOpts.StorageClass, "storage-class", "s", helpers.DefaultStorageclass, "storage class for the expanded MinIO tenant pool (can be different than original pool)")
+	f.BoolVar(&v.tenantOpts.DisableAntiAffinity, "enable-host-sharing", false, "[TESTING-ONLY] disable anti-affinity to allow pods to be co-located on a single node (unsupported in production environment)")
 	f.BoolVarP(&v.output, "output", "o", false, "generate MinIO tenant yaml with expansion details")
 
 	cmd.MarkFlagRequired("servers")
