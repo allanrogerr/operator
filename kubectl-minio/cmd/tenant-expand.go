@@ -130,9 +130,6 @@ func (v *expandCmd) run() error {
 	if err != nil {
 		return err
 	}
-	if capacityPerVolume.Sign() <= 0 {
-		return errors.New("capacity per volume needs to be greater than zero")
-	}
 
 	// Tenant pool id is zero based, generating pool using the count of existing pools in the tenant
 	if v.tenantOpts.PoolName == "" {

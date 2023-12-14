@@ -124,9 +124,6 @@ func NewTenant(opts *TenantOptions, userSecret *v1.Secret) (*miniov2.Tenant, err
 	if err != nil {
 		return nil, err
 	}
-	if capacityPerVolume.Sign() <= 0 {
-		return nil, errors.New("capacity per volume needs to be greater than zero")
-	}
 
 	t := &miniov2.Tenant{
 		TypeMeta: metav1.TypeMeta{

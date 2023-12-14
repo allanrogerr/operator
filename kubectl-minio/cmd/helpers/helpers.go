@@ -184,10 +184,11 @@ func CapacityPerVolume(capacity string, volumes int32) (*resource.Quantity, erro
 	if err != nil {
 		return nil, err
 	}
-	if totalQuantity.Sign() <= 0 {
+	quantity := resource.NewQuantity(totalQuantity.Value()/int64(volumes), totalQuantity.Format)
+	if quantity.Sign() <= 0 {
 		return nil, errors.New("capacity per volume needs to be greater than zero")
 	}
-	return resource.NewQuantity(totalQuantity.Value()/int64(volumes), totalQuantity.Format), nil
+	return quantity, nil
 }
 
 // TotalCapacity returns total capacity of a given tenant
