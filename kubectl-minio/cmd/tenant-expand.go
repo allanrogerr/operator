@@ -20,9 +20,11 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io"
+
 	"github.com/minio/kubectl-minio/cmd/helpers"
 	"github.com/minio/kubectl-minio/cmd/resources"
-	"io"
+
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/klog/v2"
@@ -135,9 +137,9 @@ func (v *expandCmd) run() error {
 		return err
 	}
 
-	// Tenant pool id is zero based, generating pool using the count of existing pools in the tenant
+	// Generate pool name using the state of existing pools in the tenant
 	if v.tenantOpts.PoolName == "" {
-		v.tenantOpts.PoolName = resources.GeneratePoolName(len(t.Spec.Pools))
+		v.tenantOpts.PoolName = resources.GeneratePoolName(t.Spec.Pools)
 	}
 
 	t.Spec.Pools = append(t.Spec.Pools, resources.Pool(&v.tenantOpts, v.tenantOpts.VolumesPerServer, *capacityPerVolume))

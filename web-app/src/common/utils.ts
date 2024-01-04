@@ -453,7 +453,21 @@ export const erasureCodeCalc = (
 
 // Pool Name Generator
 export const generatePoolName = (pools: Pool[]) => {
-  const poolCounter = pools.length;
+  // Trivial case
+  let poolCounter = pools.length;
+  if (pools.length === 0) {
+    return `pool-${poolCounter}`;
+  }
+  // Search pool names for the largest numeric suffix, then increment as a suffix
+  // If none is found then add a new suffix
+  const poolNames = pools.map((pool) => pool.name || "");
+  // If the suffix is a number, then parse as an integer, else this is also a trivial case
+  const poolSuffixes = poolNames.map((poolName) =>
+    !isNaN(Number(poolName.slice(poolName.lastIndexOf("-") + 1)))
+      ? parseInt(poolName.slice(poolName.lastIndexOf("-") + 1), 10)
+      : -1,
+  );
+  poolCounter = Math.max(...poolSuffixes) + 1;
   return `pool-${poolCounter}`;
 };
 

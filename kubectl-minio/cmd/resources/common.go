@@ -21,6 +21,7 @@ import (
 	"io/fs"
 	"log"
 	"path"
+	"strconv"
 	"strings"
 
 	"sigs.k8s.io/kustomize/kyaml/filesys"
@@ -94,7 +95,7 @@ func Pool(opts *TenantOptions, volumes int32, q resource.Quantity) miniov2.Pool 
 								{
 									Key:      miniov2.PoolLabel,
 									Operator: "In",
-									Values:   []string{opts.Name},
+									Values:   []string{opts.PoolName},
 								},
 							},
 						},
@@ -108,7 +109,20 @@ func Pool(opts *TenantOptions, volumes int32, q resource.Quantity) miniov2.Pool 
 }
 
 // GeneratePoolName Pool Name Generator
-func GeneratePoolName(poolNumber int) string {
+func GeneratePoolName(pools []miniov2.Pool) string {
+	// Trivial case
+	poolNumber := len(pools)
+	if poolNumber == 0 {
+		return fmt.Sprintf("pool-%d", poolNumber)
+	}
+	// Search pool names for the largest numeric suffix, then increment as a suffix
+	// If none is found then add a new suffix
+	for _, pool := range pools {
+		suffix := pool.Name[strings.LastIndex(pool.Name, "-")+1:]
+		if poolNumberCurrent, err := strconv.Atoi(suffix); err == nil && poolNumberCurrent > poolNumber {
+			poolNumber = poolNumberCurrent
+		}
+	}
 	return fmt.Sprintf("pool-%d", poolNumber)
 }
 
